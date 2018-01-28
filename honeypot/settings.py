@@ -37,6 +37,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'app'
 ]
 
 MIDDLEWARE = [
@@ -75,9 +76,14 @@ DATABASES = {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
         'NAME': os.environ.get('DATABASE_NAME'),
         'HOST': 'localhost',
-        'PORT': '5432',
+        'PORT': os.environ.get('DATABASE_PORT'),
     }
 }
+
+if not all(DATABASES['default'].values()):
+    raise Exception('Database not properly configured')
+
+AUTH_USER_MODEL = 'app.Account'
 
 
 # Password validation

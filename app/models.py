@@ -1,5 +1,7 @@
 from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
+from django.core import validators
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 
 class Account(AbstractBaseUser, PermissionsMixin):
@@ -17,6 +19,8 @@ class Account(AbstractBaseUser, PermissionsMixin):
             'unique': _("A user with that email already exists."),
         })
 
+    USERNAME_FIELD = 'email'
+
     def get_full_name(self):
         return self.email
 
@@ -33,18 +37,18 @@ class Account(AbstractBaseUser, PermissionsMixin):
 class AccountUser(models.Model):
     name = models.CharField(max_length=64)
     income = models.DecimalField(decimal_places=2, max_digits=14)  # lol max_digits
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='account_users')
 
 
 class Budget(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='budget_lines')
     description = models.CharField(max_length=128)
     value = models.DecimalField(decimal_places=2, max_digits=14)
 
 class Transaction(models.Model):
-    account = models.ForeignKey(Account, on_delete=models.CASCADE)
-    user = models.ForeignKey(AccountUser, on_delete=models.SET_NULL, null=True)
-    budget = models.ForeignKey(Budget, on_delete=models.SET_NULL, null=True)
+    account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='transactions')
+    user = models.ForeignKey(AccountUser, on_delete=models.SET_NULL, null=True, related_name='transactions')
+    budget = models.ForeignKey(Budget, on_delete=models.SET_NULL, null=True, related_name='transactions')
     description = models.CharField(max_length=128)
     value = models.DecimalField(decimal_places=2, max_digits=14)
     time = models.DateTimeField(auto_now_add=True)

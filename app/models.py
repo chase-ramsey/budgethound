@@ -1,32 +1,8 @@
-from django.contrib.auth.models import AbstractBaseUser, PermissionsMixin
-from django.core import validators
+from django.contrib.auth.models import AbstractUser
 from django.db import models
-from django.utils.translation import ugettext_lazy as _
 
 
-class Account(AbstractBaseUser, PermissionsMixin):
-    # Email field adapted directly from AbstractUser.username field in Django docs
-    email = models.CharField(_('email'), max_length=30, unique=True,
-        help_text=_('Required. 30 characters or fewer. Letters, digits and '
-                    '@/./+/-/_ only.'),
-        validators=[
-            validators.RegexValidator(r'^[\w.@+-]+$',
-                                      _('Enter a valid email. '
-                                        'This value may contain only letters, numbers '
-                                        'and @/./+/-/_ characters.'), 'invalid'),
-        ],
-        error_messages={
-            'unique': _("A user with that email already exists."),
-        })
-
-    USERNAME_FIELD = 'email'
-
-    def get_full_name(self):
-        return self.email
-
-    def get_short_name(self):
-        return self.email
-
+class Account(AbstractUser):
     def get_daily_goal(self):
         """
         Calculate and return the allowed spending amount per day for the account
@@ -35,15 +11,29 @@ class Account(AbstractBaseUser, PermissionsMixin):
 
 
 class AccountUser(models.Model):
+    class Meta:
+        unique_together = ('name', 'account')
+
     name = models.CharField(max_length=64)
     income = models.DecimalField(decimal_places=2, max_digits=14)  # lol max_digits
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='account_users')
 
+    def __str__(self):
+        return '{} ({})'.format(self.name, self.account_id)
+
 
 class Budget(models.Model):
+    class Meta:
+        unique_together = ('name', 'account')
+
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='budget_lines')
+    name = models.CharField(max_length=64)
     description = models.CharField(max_length=128)
     value = models.DecimalField(decimal_places=2, max_digits=14)
+
+    def __str__(self):
+        return '{} ({})'.format(self.name, self.value)
+
 
 class Transaction(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='transactions')
@@ -52,3 +42,6 @@ class Transaction(models.Model):
     description = models.CharField(max_length=128)
     value = models.DecimalField(decimal_places=2, max_digits=14)
     time = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return '{} ({})'.format(self.name, self.value)

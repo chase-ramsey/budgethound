@@ -55,7 +55,7 @@ ROOT_URLCONF = 'honeypot.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': ['templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -84,6 +84,8 @@ if not all(DATABASES['default'].values()):
     raise Exception('Database not properly configured')
 
 AUTH_USER_MODEL = 'app.Account'
+LOGIN_URL = '/login/'
+LOGIN_REDIRECT_URL = 'home'
 
 
 # Password validation

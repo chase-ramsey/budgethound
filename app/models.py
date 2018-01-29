@@ -10,8 +10,11 @@ class Account(AbstractUser):
         """
         combined_income = AccountUser.objects.filter(account=self).aggregate(total=models.Sum('income'))
         budget_total = Budget.objects.filter(account=self).aggregate(total=models.Sum('value'))
-        exact = (combined_income['total'] - budget_total['total']) / 32
-        return Decimal(format(exact.__floor__(), '.2f'))
+        try:
+            exact = (combined_income['total'] - budget_total['total']) / 32
+            return Decimal(format(exact.__floor__(), '.2f'))
+        except TypeError:
+            return Decimal('0.00')
 
 
 class AccountUser(models.Model):

@@ -30,5 +30,5 @@ class TransactionForm(forms.ModelForm):
 
     def __init__(self, account, *args, **kwargs):
         super(TransactionForm, self).__init__(*args, **kwargs)
-        user = forms.ModelChoiceField(queryset=AccountUser.objects.filter(account=account))
-        budget = forms.ModelChoiceField(queryset=Budget.objects.filter(account=account))
+        self.fields['user'] = forms.ModelChoiceField(queryset=AccountUser.objects.filter(account=account))
+        self.fields['budget'] = forms.ModelChoiceField(queryset=Budget.objects.filter(account=account))

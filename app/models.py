@@ -1,3 +1,4 @@
+from decimal import Decimal
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 
@@ -7,7 +8,10 @@ class Account(AbstractUser):
         """
         Calculate and return the allowed spending amount per day for the account
         """
-        pass
+        combined_income = AccountUser.objects.filter(account=self).aggregate(total=models.Sum('income'))
+        budget_total = Budget.objects.filter(account=self).aggregate(total=models.Sum('value'))
+        exact = (combined_income['total'] - budget_total['total']) / 32
+        return Decimal(format(exact.__floor__(), '.2f'))
 
 
 class AccountUser(models.Model):

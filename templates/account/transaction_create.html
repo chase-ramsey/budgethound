@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+{% block extra_title %}| Transaction{% endblock %}
+
+{% block content %}
+<h1>Log Transaction</h1>
+<form method="POST" name="log-transaction">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <button type="submit">Log</button>
+    <a href="{% url 'account_home' %}">Cancel</a>
+</form>
+{% endblock %}

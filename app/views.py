@@ -1,10 +1,13 @@
-from app.forms import AccountUserForm, BudgetItemForm, RegistrationForm
-from app.models import AccountUser, Budget
+from app.forms import AccountUserForm, BudgetItemForm, RegistrationForm, TransactionForm
+from app.models import AccountUser, Budget, Transaction
+from datetime import datetime, time
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import redirect, render, reverse
+from django.utils.timezone import localtime, now
 
 
 def home(request):
@@ -42,7 +45,10 @@ def register(request):
 
 @login_required
 def account_home(request):
-    users = AccountUser.objects.filter(account=request.user)
+    account = request.user
+    if not Budget.objects.filter(account=account, name=Budget.DAILY).exists():
+        Budget.objects.create(account=account, name=Budget.DAILY, description=Budget.DAILY_DESC)
+    users = AccountUser.objects.filter(account=account)
     if not users:
         messages.warning(
             request,
@@ -51,8 +57,32 @@ def account_home(request):
             extra_tags='safe'
         )
 
+    start = datetime.combine(localtime(now()), time.min)
+    today = start.date()
+
+    daily_budget = account.get_daily_goal()
+    daily_trans = Transaction.objects.filter(
+        account=request.user,
+        time__gte=start,
+        budget__name=Budget.DAILY
+    )
+
+    if daily_trans:
+        t_sum = daily_trans.aggregate(total=Sum('value'))['total']
+        remaining = daily_budget - t_sum
+    else:
+        remaining = daily_budget
+
+    other_trans = Transaction.objects.filter(account=request.user, time__gte=start) \
+        .exclude(budget__name=Budget.DAILY)
+
     ctx = {
         'users': users,
+        'today': today,
+        'daily_budget': daily_budget,
+        'remaining': remaining,
+        'daily_trans': daily_trans,
+        'other_trans': other_trans
     }
 
     return render(request, 'account/index.html', ctx)
@@ -94,7 +124,7 @@ def user_create(request):
 
 @login_required
 def budget_list(request):
-    budget_items = Budget.objects.filter(account=request.user)
+    budget_items = Budget.objects.filter(account=request.user).exclude(name=Budget.DAILY)
     print(budget_items)
     if not budget_items:
         messages.warning(
@@ -125,3 +155,20 @@ def budget_create(request):
 
     form = BudgetItemForm()
     return render(request, 'account/budget_create.html', {'form': form})
+
+
+@login_required
+def transaction_create(request):
+    if request.method == 'POST':
+        form = TransactionForm(request.user, request.POST)
+        if form.is_valid():
+            transaction = form.save(commit=False)
+            transaction.account = request.user
+            form.save()
+            return redirect('account_home')
+        else:
+            for error in form.errors:
+                messages.error(request, error)
+
+    form = TransactionForm(request.user)
+    return render(request, 'account/transaction_create.html', {'form': form})

@@ -3,4 +3,72 @@
 
 {% block content %}
 <h1>Signed in as {{ user.username }}</h1>
+<div id="transaction-log">
+    <table>
+        <tr>
+            <td><b>Date: </b></td>
+            <td>{{ today }}</td>
+        </tr>
+        <tr>
+            <td><b>Daily Budget: </b></td>
+            <td>{{ daily_budget }}</td>
+        </tr>
+        <tr>
+        <td><b>Remaining: </b></td>
+        <td>{{ remaining }}</td>
+        </tr>
+    </table>
+    {% if daily_trans or other_trans %}
+        {% if daily_trans %}
+        <h2>Daily</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>User</th>
+                    <th>Budget</th>
+                    <th>Name</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            {% for item in daily_trans %}
+            <tr>
+                <td>{{ item.time }}</td>
+                <td>{{ item.user }}</td>
+                <td>{{ item.budget.name }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.value }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+        {% if other_trans %}
+        <h2>Other</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>User</th>
+                    <th>Budget</th>
+                    <th>Name</th>
+                    <th>Value</th>
+                </tr>
+            </thead>
+            {% for item in other_trans %}
+            <tr>
+                <td>{{ item.time }}</td>
+                <td>{{ item.user }}</td>
+                <td>{{ item.budget.name }}</td>
+                <td>{{ item.description }}</td>
+                <td>{{ item.value }}</td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% endif %}
+    {% else %}
+    <p>
+        <em>No transactions today.</em>
+    </p>
+</div>
+{% endif %}
 {% endblock %}

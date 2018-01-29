@@ -7,6 +7,7 @@ from app.views import (
     budget_list,
     budget_create,
     register, 
+    transaction_create,
     user_create, 
     users_list
 )
@@ -19,6 +20,7 @@ urlpatterns = [
     path('account/users/create/', user_create, name='user_create'),
     path('account/budget/', budget_list, name='budget_list'),
     path('account/budget/create/', budget_create, name='budget_create'),
+    path('account/transaction/create/', transaction_create, name='transaction_create'),
     path('login/', auth_views.login, {'template_name': 'auth/login.html'}, name='login'),
     path('logout/', auth_views.logout, {'next_page': '/login'}, name='logout'),
     path('register/', register, name='register'),

@@ -23,27 +23,30 @@ class AccountUser(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='account_users')
 
     def __str__(self):
-        return '{} ({})'.format(self.name, self.account_id)
+        return self.name
 
 
 class Budget(models.Model):
+    DAILY = 'Daily'
+    DAILY_DESC =  'Daily spending allowance'
+
     class Meta:
         unique_together = ('name', 'account')
 
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='budget_lines')
     name = models.CharField(max_length=64)
     description = models.CharField(max_length=128)
-    value = models.DecimalField(decimal_places=2, max_digits=14)
+    value = models.DecimalField(decimal_places=2, max_digits=14, null=True)
 
     def __str__(self):
-        return '{} ({})'.format(self.name, self.value)
+        return self.name
 
 
 class Transaction(models.Model):
     account = models.ForeignKey(Account, on_delete=models.CASCADE, related_name='transactions')
     user = models.ForeignKey(AccountUser, on_delete=models.SET_NULL, null=True, related_name='transactions')
     budget = models.ForeignKey(Budget, on_delete=models.SET_NULL, null=True, related_name='transactions')
-    description = models.CharField(max_length=128)
+    description = models.CharField(max_length=128, blank=True)
     value = models.DecimalField(decimal_places=2, max_digits=14)
     time = models.DateTimeField(auto_now_add=True)
 

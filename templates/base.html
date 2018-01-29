@@ -6,6 +6,15 @@
         body {
             font-family: sans-serif;
         }
+
+        table {
+            margin: 20px 10px;
+        }
+
+        th, td {
+            text-align: left;
+            padding: 3px 10px;
+        }
     </style>
 </head>
 <body>
@@ -14,6 +23,7 @@
         <a href="{% url 'account_home' %}">Account</a>
         <a href="{% url 'users_list' %}">Users</a>
         <a href="{% url 'budget_list' %}">Budget</a>
+        <a href="{% url 'transaction_create' %}">Log Transaction</a>
         <a href="{% url 'logout' %}">Logout</a>
     {% else %}
         <a href="{% url 'login' %}">Login</a>

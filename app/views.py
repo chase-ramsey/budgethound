@@ -65,7 +65,7 @@ def account_home(request):
         account=request.user,
         time__gte=start,
         budget__name=Budget.DAILY
-    )
+    ).order_by('-time')
 
     if daily_trans:
         t_sum = daily_trans.aggregate(total=Sum('value'))['total']
@@ -74,7 +74,8 @@ def account_home(request):
         remaining = daily_budget
 
     other_trans = Transaction.objects.filter(account=request.user, time__gte=start) \
-        .exclude(budget__name=Budget.DAILY)
+        .exclude(budget__name=Budget.DAILY) \
+        .order_by('-time')
 
     ctx = {
         'users': users,

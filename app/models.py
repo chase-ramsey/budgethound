@@ -20,8 +20,8 @@ class Account(AbstractUser):
             return Decimal('0.00')
 
     def get_weekly_standing(self):
-        today = make_aware(datetime.combine(localtime(now()), time.min), \
-            timezone=get_current_timezone())
+        today = make_aware(datetime.combine(localtime(now()), time.min),
+                           timezone=get_current_timezone())
 
         cal = monthcalendar(today.year, today.month)
         week = None
@@ -58,7 +58,7 @@ class AccountUser(models.Model):
 
 class Budget(models.Model):
     DAILY = 'Daily'
-    DAILY_DESC =  'Daily spending allowance'
+    DAILY_DESC = 'Daily spending allowance'
 
     class Meta:
         unique_together = ('name', 'account')

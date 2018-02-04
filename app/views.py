@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.signals import user_logged_out
 from django.db.models import Sum
 from django.dispatch import receiver
-from django.http import HttpResponse, JsonResponse
+from django.http import JsonResponse
 from django.shortcuts import redirect, render, reverse
 from django.utils.timezone import get_current_timezone, localtime, make_aware, now
 
@@ -27,8 +27,6 @@ def register(request):
             user = form.save()
 
             # Login under new account
-            username = form.cleaned_data.get('username')
-            raw_password = form.cleaned_data.get('password1')
             login(request, user)
 
             # Go to account home
@@ -48,7 +46,7 @@ def on_logout(sender, request, **kwargs):
 
 # # # # # # # # # # # # # # # # # # # #
 # ALL BELOW SHOULD BE LOGIN REQUIRED  #
-# # # # # # # # # # # # # # # # # # # # 
+# # # # # # # # # # # # # # # # # # # #
 
 @login_required
 def account_home(request):
@@ -64,8 +62,10 @@ def account_home(request):
             extra_tags=['safe', 'warning']
         )
 
-    start = make_aware(datetime.combine(localtime(now()), time.min), \
-        timezone=get_current_timezone())
+    start = make_aware(
+        datetime.combine(localtime(now()), time.min),
+        timezone=get_current_timezone()
+    )
 
     today = start.date()
 
@@ -77,7 +77,6 @@ def account_home(request):
     else:
         weekly_standing = str(weekly_standing)
         standing_class = 'has-text-danger'
-
 
     daily_trans = Transaction.objects.filter(
         account=request.user,
@@ -199,8 +198,10 @@ def transaction_create(request):
 
 @login_required
 def get_daily_pie_data(request):
-    start = make_aware(datetime.combine(localtime(now()), time.min), \
-        timezone=get_current_timezone())
+    start = make_aware(
+        datetime.combine(localtime(now()), time.min),
+        timezone=get_current_timezone()
+    )
 
     account = request.user
     daily_budget = account.get_daily_goal()

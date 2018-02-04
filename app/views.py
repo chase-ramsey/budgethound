@@ -4,10 +4,12 @@ from datetime import datetime, time
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.signals import user_logged_out
 from django.db.models import Sum
+from django.dispatch import receiver
 from django.http import HttpResponse
 from django.shortcuts import redirect, render, reverse
-from django.utils.timezone import localtime, now
+from django.utils.timezone import get_current_timezone, localtime, make_aware, now
 
 
 def home(request):
@@ -39,6 +41,11 @@ def register(request):
     return render(request, 'auth/register.html', ctx)
 
 
+@receiver(user_logged_out)
+def on_logout(sender, request, **kwargs):
+    messages.info(request, 'Successfully logged out', extra_tags='success')
+
+
 # # # # # # # # # # # # # # # # # # # #
 # ALL BELOW SHOULD BE LOGIN REQUIRED  #
 # # # # # # # # # # # # # # # # # # # # 
@@ -54,10 +61,12 @@ def account_home(request):
             request,
             'There are no users associated with your account. '
             'Create users <a href={}>here</a>.'.format(reverse('user_create')),
-            extra_tags='safe'
+            extra_tags=['safe', 'warning']
         )
 
-    start = datetime.combine(localtime(now()), time.min)
+    start = make_aware(datetime.combine(localtime(now()), time.min), \
+        timezone=get_current_timezone())
+
     today = start.date()
 
     daily_budget = account.get_daily_goal()
@@ -126,12 +135,12 @@ def user_create(request):
 @login_required
 def budget_list(request):
     budget_items = Budget.objects.filter(account=request.user).exclude(name=Budget.DAILY)
-    print(budget_items)
     if not budget_items:
         messages.warning(
             request,
             "You haven't created any budget line items. "
-            'Start <a href={}>here</a>.'.format(reverse('budget_create'))
+            'Start <a href={}>here</a>.'.format(reverse('budget_create')),
+            extra_tags=['safe', 'warning']
         )
 
     ctx = {

@@ -2,11 +2,43 @@
 {% block extra_title %}| Budget{% endblock %}
 
 {% block content %}
-<h1>Create Budget Item</h1>
-<form method="POST" name="create-budget-item">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Create</button>
-    <a href="{% url 'budget_list' %}">Cancel</a>
-</form>
+<h1 class="title">Create Budget Item</h1>
+<div class="columns">
+    <div class="column is-one-third">
+        <form method="post" name="create-budget">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="field">
+                <label for="{{ form.name.id_for_label }}" class="label">Name</label>
+                <div class="control">
+                    {{ form.name }}
+                </div>
+            </div>
+            <div class="field">
+                <label for="{{ form.description.id_for_label }}" class="label">Description</label>
+                <div class="control">
+                    {{ form.description }}
+                </div>
+            </div>
+            <div class="field">
+                <label for="{{ form.value.id_for_label }}" class="label">Value</label>
+                <div class="control">
+                    {{ form.value }}
+                </div>
+            </div>
+            <button type="submit" class="button is-success">Create</button>
+            <a href="{% url 'budget_list' %}" class="button is-warning">Cancel</a>
+        </form>
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    <script language="javascript">
+        $(document).ready(() => {
+                $('input').addClass('input');
+            }
+        );
+    </script>
 {% endblock %}

@@ -2,15 +2,47 @@
 {% block extra_title %}| Register{% endblock %}
 
 {% block content %}
-<h1>Register</h1>
+<h1 class="title">Register</h1>
 
-<form method="post" name="register">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Register</button>
-</form>
+<div class="columns">
+    <div class="column is-one-third">
+        <form method="post" name="register">
+            {% csrf_token %}
+            {{ form.non_field_errors }}
+            <div class="field">
+                <label for="{{ form.username.id_for_label }}" class="label">Email</label>
+                <div class="control">
+                    {{ form.username }}
+                </div>
+            </div>
+            <div class="field">
+                <label for="{{ form.password1.id_for_label }}" class="label">Password</label>
+                <div class="control">
+                    {{ form.password1 }}
+                </div>
+            </div>
+            <div class="field">
+                <label for="{{ form.password2.id_for_label }}" class="label">Confirm password</label>
+                <div class="control">
+                    {{ form.password2 }}
+                </div>
+            </div>
+            <button type="submit" class="button">Register</button>
+        </form>
+    </div>
+</div>
 
 <p>
     Already have an account? <a href="{% url 'login' %}">Login</a>
 </p>
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    <script language="javascript">
+        $(document).ready(() => {
+                $('input').addClass('input');
+            }
+        );
+    </script>
 {% endblock %}

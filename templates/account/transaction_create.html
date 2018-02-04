@@ -2,11 +2,51 @@
 {% block extra_title %}| Transaction{% endblock %}
 
 {% block content %}
-<h1>Log Transaction</h1>
-<form method="POST" name="log-transaction">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit">Log</button>
-    <a href="{% url 'account_home' %}">Cancel</a>
-</form>
+<h1 class="title">Log Transaction</h1>
+<div class="column is-one-third">
+    <form method="post" name="log-transaction">
+        {% csrf_token %}
+        {{ form.non_field_errors }}
+        <div class="field">
+            <label for="{{ form.user.id_for_label }}" class="label">User</label>
+            <div class="control">
+                <div class="select">
+                    {{ form.user }}
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label for="{{ form.budget.id_for_label }}" class="label">Budget</label>
+            <div class="control">
+                <div class="select">
+                    {{ form.budget }}
+                </div>
+            </div>
+        </div>
+        <div class="field">
+            <label for="{{ form.description.id_for_label }}" class="label">Description</label>
+            <div class="control">
+                {{ form.description }}
+            </div>
+        </div>
+        <div class="field">
+            <label for="{{ form.value.id_for_label }}" class="label">Value</label>
+            <div class="control">
+                {{ form.value }}
+            </div>
+        </div>
+        <button type="submit" class="button">Log</button>
+        <a href="{% url 'account_home' %}">Cancel</a>
+    </form>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+    {{ block.super }}
+    <script language="javascript">
+        $(document).ready(() => {
+                $('input').addClass('input');
+            }
+        );
+    </script>
 {% endblock %}

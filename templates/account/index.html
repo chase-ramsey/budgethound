@@ -2,73 +2,121 @@
 {% block extra_title %}| Account{% endblock %}
 
 {% block content %}
-<h1>Signed in as {{ user.username }}</h1>
-<div id="transaction-log">
-    <table>
-        <tr>
-            <td><b>Date: </b></td>
-            <td>{{ today|date:"l, M. d, Y" }}</td>
-        </tr>
-        <tr>
-            <td><b>Daily Budget: </b></td>
-            <td>{{ daily_budget }}</td>
-        </tr>
-        <tr>
-        <td><b>Remaining: </b></td>
-        <td>{{ remaining }}</td>
-        </tr>
-    </table>
-    {% if daily_trans or other_trans %}
-        {% if daily_trans %}
-        <h2>Daily</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>User</th>
-                    <th>Budget</th>
-                    <th>Description</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
-            {% for item in daily_trans %}
-            <tr>
-                <td>{{ item.time|date:"Y M d H:i:s" }}</td>
-                <td>{{ item.user }}</td>
-                <td>{{ item.budget.name }}</td>
-                <td>{{ item.description }}</td>
-                <td>{{ item.value }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-        {% endif %}
-        {% if other_trans %}
-        <h2>Other</h2>
-        <table>
-            <thead>
-                <tr>
-                    <th>Time</th>
-                    <th>User</th>
-                    <th>Budget</th>
-                    <th>Description</th>
-                    <th>Value</th>
-                </tr>
-            </thead>
-            {% for item in other_trans %}
-            <tr>
-                <td>{{ item.time|date:"Y M d H:i:s" }}</td>
-                <td>{{ item.user }}</td>
-                <td>{{ item.budget.name }}</td>
-                <td>{{ item.description }}</td>
-                <td>{{ item.value }}</td>
-            </tr>
-            {% endfor %}
-        </table>
-        {% endif %}
-    {% else %}
-    <p>
-        <em>No transactions today.</em>
-    </p>
+<div class="hero is-primary">
+    <div class="hero-body">
+        <div class="container">
+            <h1 class="title">Signed in as {{ user.username }}</h1>
+        </div>
+    </div>
 </div>
-{% endif %}
+
+<div class="hero is-warning">
+    <div class="hero-body">
+        <div class="container">
+            <div class="level">
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">Date</p>
+                        <p class="title">{{ today|date:"l, M. d, Y" }}</p>
+                    </div>
+                </div>
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">Daily Budget</p>
+                        <p class="title">{{ daily_budget }}</p>
+                    </div>
+                </div>
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">Remaining</p>
+                        <p class="title">{{ remaining }}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="section">
+    <div class="container">
+        <div class="columns is-desktop">
+            {% if daily_trans or other_trans %}
+                {% if daily_trans %}
+                <div class="column">
+                    <div class="card">
+                        <header class="card-header">
+                            <h2 class="card-header-title">Daily</h2>
+                        </header>
+                        <div class="card-content">
+                            <table class="table is-striped is-hoverable is-fullwidth">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>User</th>
+                                        <th class="is-hidden-mobile">Budget</th>
+                                        <th class="is-hidden-mobile">Description</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                {% for item in daily_trans %}
+                                <tr>
+                                    <td>{{ item.time|date:"P" }}</td>
+                                    <td>{{ item.user }}</td>
+                                    <td class="is-hidden-mobile">{{ item.budget.name }}</td>
+                                    <td class="is-hidden-mobile">{{ item.description }}</td>
+                                    <td>{{ item.value }}</td>
+                                </tr>
+                                {% endfor %}
+                            </table>
+                        </div>
+                        <footer class="card-footer">
+                            <a href="#" class="card-footer-item">See all daily transactions</a>
+                        </footer>
+                    </div>
+                </div>
+                {% endif %}
+                {% if other_trans %}
+                <div class="column">
+                    <div class="card">
+                        <header class="card-header">
+                            <h2 class="card-header-title">Other</h2>
+                        </header>
+                        <div class="card-content">
+                            <table class="table is-striped is-hoverable is-fullwidth">
+                                <thead>
+                                    <tr>
+                                        <th>Time</th>
+                                        <th>User</th>
+                                        <th class="is-hidden-mobile">Budget</th>
+                                        <th class="is-hidden-mobile">Description</th>
+                                        <th>Value</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for item in other_trans %}
+                                    <tr>
+                                        <td>{{ item.time|date:"P" }}</td>
+                                        <td>{{ item.user }}</td>
+                                        <td class="is-hidden-mobile">{{ item.budget.name }}</td>
+                                        <td class="is-hidden-mobile">{{ item.description }}</td>
+                                        <td>{{ item.value }}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                        <footer class="card-footer">
+                            <a href="#" class="card-footer-item">See all other transactions</a>
+                        </footer>
+                    </div>
+                </div>
+                {% endif %}
+            {% else %}
+            <p>
+                <em>No transactions today.</em>
+            </p>
+            {% endif %}
+        </div>
+    </div>
+</div>
 {% endblock %}

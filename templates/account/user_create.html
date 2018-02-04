@@ -2,27 +2,29 @@
 {% block extra_title %}| User{% endblock %}
 
 {% block content %}
-<h1 class="title">Create User</h1>
-<div class="columns">
-    <div class="column is-one-third">
-        <form method="post" name="create-user">
-            {% csrf_token %}
-            {{ form.non_field_errors }}
-            <div class="field">
-                <label for="{{ form.name.id_for_label }}" class="label">Name</label>
-                <div class="control">
-                    {{ form.name }}
+<div class="section">
+    <h1 class="title">Create User</h1>
+    <div class="columns">
+        <div class="column is-one-third">
+            <form method="post" name="create-user">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="field">
+                    <label for="{{ form.name.id_for_label }}" class="label">Name</label>
+                    <div class="control">
+                        {{ form.name }}
+                    </div>
                 </div>
-            </div>
-            <div class="field">
-                <label for="{{ form.income.id_for_label }}" class="label">Income</label>
-                <div class="control">
-                    {{ form.income }}
+                <div class="field">
+                    <label for="{{ form.income.id_for_label }}" class="label">Income</label>
+                    <div class="control">
+                        {{ form.income }}
+                    </div>
                 </div>
-            </div>
-            <button type="submit" class="button is-success">Create</button>
-            <a href="{% url 'users_list' %}" class="button is-warning">Cancel</a>
-        </form>
+                <button type="submit" class="button is-success">Create</button>
+                <a href="{% url 'users_list' %}" class="button is-warning">Cancel</a>
+            </form>
+        </div>
     </div>
 </div>
 {% endblock %}

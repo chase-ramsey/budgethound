@@ -2,27 +2,29 @@
 {% block extra_title %}| Login{% endblock %}
 
 {% block content %}
-<h1 class="title">Login</h1>
-
-<div class="columns">
-    <div class="column is-one-third">
-        <form method="post" name="login">
-            {% csrf_token %}
-            {{ form.non_field_errors }}
-            <div class="field">
-                <label for="{{ form.username.id_for_label }}" class="label">Email</label>
-                <div class="control">
-                    {{ form.username }}
+<div class="section">
+    <h1 class="title">Login</h1>
+    
+    <div class="columns">
+        <div class="column is-one-third">
+            <form method="post" name="login">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="field">
+                    <label for="{{ form.username.id_for_label }}" class="label">Email</label>
+                    <div class="control">
+                        {{ form.username }}
+                    </div>
                 </div>
-            </div>
-            <div class="field">
-                <label for="{{ form.password.id_for_label }}" class="label">Password</label>
-                <div class="control">
-                    {{ form.password }}
+                <div class="field">
+                    <label for="{{ form.password.id_for_label }}" class="label">Password</label>
+                    <div class="control">
+                        {{ form.password }}
+                    </div>
                 </div>
-            </div>
-            <button type="submit" class="button">Login</button>
-        </form>
+                <button type="submit" class="button">Login</button>
+            </form>
+        </div>
     </div>
 </div>
 

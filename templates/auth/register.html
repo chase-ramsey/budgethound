@@ -2,39 +2,41 @@
 {% block extra_title %}| Register{% endblock %}
 
 {% block content %}
-<h1 class="title">Register</h1>
+<div class="section">
+    <h1 class="title">Register</h1>
 
-<div class="columns">
-    <div class="column is-one-third">
-        <form method="post" name="register">
-            {% csrf_token %}
-            {{ form.non_field_errors }}
-            <div class="field">
-                <label for="{{ form.username.id_for_label }}" class="label">Email</label>
-                <div class="control">
-                    {{ form.username }}
+    <div class="columns">
+        <div class="column is-one-third">
+            <form method="post" name="register">
+                {% csrf_token %}
+                {{ form.non_field_errors }}
+                <div class="field">
+                    <label for="{{ form.username.id_for_label }}" class="label">Email</label>
+                    <div class="control">
+                        {{ form.username }}
+                    </div>
                 </div>
-            </div>
-            <div class="field">
-                <label for="{{ form.password1.id_for_label }}" class="label">Password</label>
-                <div class="control">
-                    {{ form.password1 }}
+                <div class="field">
+                    <label for="{{ form.password1.id_for_label }}" class="label">Password</label>
+                    <div class="control">
+                        {{ form.password1 }}
+                    </div>
                 </div>
-            </div>
-            <div class="field">
-                <label for="{{ form.password2.id_for_label }}" class="label">Confirm password</label>
-                <div class="control">
-                    {{ form.password2 }}
+                <div class="field">
+                    <label for="{{ form.password2.id_for_label }}" class="label">Confirm password</label>
+                    <div class="control">
+                        {{ form.password2 }}
+                    </div>
                 </div>
-            </div>
-            <button type="submit" class="button">Register</button>
-        </form>
+                <button type="submit" class="button">Register</button>
+            </form>
+        </div>
     </div>
-</div>
 
-<p>
-    Already have an account? <a href="{% url 'login' %}">Login</a>
-</p>
+    <p>
+        Already have an account? <a href="{% url 'login' %}">Login</a>
+    </p>
+</div>
 {% endblock %}
 
 {% block extra_js %}

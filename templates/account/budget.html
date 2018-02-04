@@ -2,11 +2,13 @@
 {% block extra_title %}| Budget{% endblock %}
 
 {% block content %}
-<h1>Budget</h1>
-<ul>
-    {% for item in budget_items %}
-    <li>{{ item.name }}: {{ item.value }}</li>
-    {% endfor %}
-</ul>
-<a href="{% url 'budget_create' %}">Add Item</a>
+<div class="section">
+    <h1 class="title">Budget</h1>
+    <ul>
+        {% for item in budget_items %}
+        <li>{{ item.name }}: {{ item.value }}</li>
+        {% endfor %}
+    </ul>
+    <a href="{% url 'budget_create' %}">Add Item</a>
+</div>
 {% endblock %}

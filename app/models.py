@@ -1,6 +1,9 @@
+from calendar import monthcalendar
+from datetime import datetime, time, timedelta
 from decimal import Decimal
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils.timezone import get_current_timezone, localtime, make_aware, now
 
 
 class Account(AbstractUser):
@@ -15,6 +18,30 @@ class Account(AbstractUser):
             return Decimal(format(exact.__floor__(), '.2f'))
         except TypeError:
             return Decimal('0.00')
+
+    def get_weekly_standing(self):
+        today = make_aware(datetime.combine(localtime(now()), time.min), \
+            timezone=get_current_timezone())
+
+        cal = monthcalendar(today.year, today.month)
+        week = None
+        for wk in cal:
+            if today.day in wk:
+                week = list(filter(lambda d: d > 0, wk))
+
+        days_offset = week.index(today.day) + 1
+        start = today - timedelta(days=days_offset)
+
+        if not week:
+            raise Exception('Error determining current week')
+
+        weekly_spent = Transaction.objects.filter(account=self, time__gte=start) \
+            .filter(budget__name=Budget.DAILY) \
+            .aggregate(total=models.Sum('value'))['total'] or 0
+
+        weekly_goal = self.get_daily_goal() * days_offset
+
+        return weekly_goal - weekly_spent
 
 
 class AccountUser(models.Model):

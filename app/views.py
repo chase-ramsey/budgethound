@@ -70,6 +70,15 @@ def account_home(request):
     today = start.date()
 
     daily_budget = account.get_daily_goal()
+    weekly_standing = account.get_weekly_standing()
+    if weekly_standing >= 0:
+        weekly_standing = '+' + str(weekly_standing)
+        standing_class = 'has-text-success'
+    else:
+        weekly_standing = str(weekly_standing)
+        standing_class = 'has-text-danger'
+
+
     daily_trans = Transaction.objects.filter(
         account=request.user,
         time__gte=start,
@@ -90,6 +99,8 @@ def account_home(request):
         'users': users,
         'today': today,
         'daily_budget': daily_budget,
+        'weekly_standing': weekly_standing,
+        'standing_class': standing_class,
         'remaining': remaining,
         'daily_trans': daily_trans,
         'other_trans': other_trans

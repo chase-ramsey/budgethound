@@ -7,7 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.signals import user_logged_out
 from django.db.models import Sum
 from django.dispatch import receiver
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import redirect, render, reverse
 from django.utils.timezone import get_current_timezone, localtime, make_aware, now
 
@@ -106,6 +106,8 @@ def account_home(request):
         'other_trans': other_trans
     }
 
+    messages.info(request, 'Logged in as {}'.format(account.username), extra_tags='default')
+
     return render(request, 'account/index.html', ctx)
 
 
@@ -193,3 +195,28 @@ def transaction_create(request):
 
     form = TransactionForm(request.user)
     return render(request, 'account/transaction_create.html', {'form': form})
+
+
+@login_required
+def get_daily_pie_data(request):
+    start = make_aware(datetime.combine(localtime(now()), time.min), \
+        timezone=get_current_timezone())
+
+    account = request.user
+    daily_budget = account.get_daily_goal()
+    t_sum = Transaction.objects.filter(
+        account=request.user,
+        time__gte=start,
+        budget__name=Budget.DAILY
+    ).aggregate(total=Sum('value'))['total']
+
+    remaining = daily_budget - t_sum
+
+    data = {
+        'table_data': [
+            ['Spent', t_sum],
+            ['Remaining', remaining]
+        ]
+    }
+
+    return JsonResponse(data)

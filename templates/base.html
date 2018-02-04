@@ -83,23 +83,29 @@
         </div>
     </div>
 
-    {% if messages %}
-        {% for message in messages %}
-            {% if 'success' in message.tags %}
-            <div class="message is-success">
-                <div class="message-body">{{ message|safe }}</div>
-            </div>
-            {% elif 'info' in message.tags %}
-            <div class="message is-default">
-                <div class="message-body">{{ message|safe }}</div>
-            </div>
-            {% elif 'warning' in message.tags %}
-            <div class="message is-warning">
-                <div class="message-body">{{ message|safe }}</div>
-            </div>
-            {% endif %}
-        {% endfor %}
-    {% endif %}
+    <div id="messages">
+        {% if messages %}
+            {% for message in messages %}
+                {% if 'logged_in' in message.tags %}
+                <div class="message is-default">
+                    <div class="message-body">{{ message }}</div>
+                </div>
+                {% elif 'success' in message.tags %}
+                <div class="message is-success">
+                    <div class="message-body">{{ message }}</div>
+                </div>
+                {% elif 'info' in message.tags %}
+                <div class="message is-default">
+                    <div class="message-body">{{ message }}</div>
+                </div>
+                {% elif 'warning' in message.tags %}
+                <div class="message is-warning">
+                    <div class="message-body">{{ message|safe }}</div>
+                </div>
+                {% endif %}
+            {% endfor %}
+        {% endif %}
+    </div>
 
     <div id="main">
         <div class="container is-fluid">

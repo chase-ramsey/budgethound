@@ -44,7 +44,7 @@
             <div class="column is-one-third-desktop">
                 <div class="card">
                     <div class="card-header">
-                        <h2 class="card-header-title">Current Status</h2>
+                        <h2 class="card-header-title">Today's Status</h2>
                     </div>
                     <div class="card-content">
                         <div id="daily-pie"></div>
@@ -157,15 +157,16 @@
     <script type="text/javascript">
         $(document).ready(() => {
             google.charts.load("current", {packages:["corechart"]});
-            google.charts.setOnLoadCallback(drawChart);
+            google.charts.setOnLoadCallback(drawPieChart);
+            google.charts.setOnLoadCallback(drawColumnChart);
 
-            function drawChart() {
+            function drawPieChart() {
                 var data = new google.visualization.DataTable();
-                data.addColumn('string', 'Category')
-                data.addColumn('number', 'Dollars')
+                data.addColumn('string', 'Category');
+                data.addColumn('number', 'Dollars');
                 $.get('{% url "daily_pie_ajax" %}', (res) => {
                     let rows = res['table_data'].map((row) => {
-                        return [row[0], parseFloat(row[1])]
+                        return [row[0], parseFloat(row[1])];
                     });
                     data.addRows(rows)
 
@@ -188,5 +189,34 @@
                 });
             }
         });
+
+        function drawColumnChart() {
+            var data = new google.visualization.DataTable();
+            data.addColumn('date', 'Date');
+            data.addColumn('number', 'Spending');
+            $.get('{% url "weekly_status_ajax" %}', (res) => {
+                let rows = res.data.map((row) => {
+                    return [
+                        new Date(row[0]),
+                        parseFloat(row[1])
+                    ];
+                });
+                data.addRows(rows)
+
+                let options = {
+                    title: null,
+                    colors: ['#ffdd59'],
+                    fontSize: 14,
+                    chartArea: {
+                        height: '75%',
+                        width: '75%'
+                    },
+                }
+
+
+                let chart = new google.visualization.ColumnChart(document.getElementById('weekly-status'));
+                chart.draw(data, options);
+            });
+        }
     </script>
 {% endblock %}

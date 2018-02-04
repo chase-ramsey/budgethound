@@ -1,15 +1,17 @@
 from app.forms import AccountUserForm, BudgetItemForm, RegistrationForm, TransactionForm
 from app.models import AccountUser, Budget, Transaction
-from datetime import datetime, time
+from app.util.calendar import get_current_week, get_local_today_min, get_start_day_for_week
+from datetime import datetime
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.signals import user_logged_out
 from django.db.models import Sum
+from django.db.models.functions import TruncDay
 from django.dispatch import receiver
 from django.http import JsonResponse
 from django.shortcuts import redirect, render, reverse
-from django.utils.timezone import get_current_timezone, localtime, make_aware, now
+from django.utils.timezone import get_current_timezone, make_aware
 
 
 def home(request):
@@ -62,11 +64,7 @@ def account_home(request):
             extra_tags=['safe', 'warning']
         )
 
-    start = make_aware(
-        datetime.combine(localtime(now()), time.min),
-        timezone=get_current_timezone()
-    )
-
+    start = get_local_today_min()
     today = start.date()
 
     daily_budget = account.get_daily_goal()
@@ -105,7 +103,7 @@ def account_home(request):
         'other_trans': other_trans
     }
 
-    messages.info(request, 'Logged in as {}'.format(account.username), extra_tags='default')
+    messages.info(request, 'Logged in as {}'.format(account.username), extra_tags='logged_in')
 
     return render(request, 'account/index.html', ctx)
 
@@ -198,10 +196,7 @@ def transaction_create(request):
 
 @login_required
 def get_daily_pie_data(request):
-    start = make_aware(
-        datetime.combine(localtime(now()), time.min),
-        timezone=get_current_timezone()
-    )
+    start = get_local_today_min()
 
     account = request.user
     daily_budget = account.get_daily_goal()
@@ -221,3 +216,37 @@ def get_daily_pie_data(request):
     }
 
     return JsonResponse(data)
+
+
+@login_required
+def get_weekly_status_data(request):
+    account = request.user
+    start_day = get_start_day_for_week()
+
+    week = get_current_week()
+    week_days = map(
+        lambda x: make_aware(
+            datetime(start_day.year, start_day.month, x),
+            timezone=get_current_timezone()
+        ),
+        week
+    )
+
+    totals = Transaction.objects.filter(account=account) \
+        .filter(time__gte=start_day) \
+        .annotate(day=TruncDay('time')) \
+        .values('day') \
+        .annotate(total=Sum('value')) \
+        .values('day', 'total') \
+        .order_by('day')
+
+    total_days = {item['day']: item['total'] for item in totals}
+
+    data = list()
+    for day in week_days:
+        if day in total_days:
+            data.append([day, total_days[day]])
+        else:
+            data.append([day, 0])
+
+    return JsonResponse({'data': data})

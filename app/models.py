@@ -22,14 +22,14 @@ class Account(AbstractUser):
         today = get_local_today_min()
         week = get_current_week()
 
-        days_offset = week.index(today.day) + 1
+        days_offset = week.index(today.day)
         start = today - timedelta(days=days_offset)
 
         weekly_spent = Transaction.objects.filter(account=self, time__gte=start) \
             .filter(budget__name=Budget.DAILY) \
             .aggregate(total=models.Sum('value'))['total'] or 0
 
-        weekly_goal = self.get_daily_goal() * days_offset
+        weekly_goal = self.get_daily_goal() * (days_offset + 1)
 
         return weekly_goal - weekly_spent
 

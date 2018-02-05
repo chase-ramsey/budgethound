@@ -217,6 +217,9 @@ def get_daily_pie_data(request):
         budget__name=Budget.DAILY
     ).aggregate(total=Sum('value'))['total']
 
+    if not t_sum:
+        t_sum = 0
+
     remaining = daily_budget - t_sum
 
     data = {

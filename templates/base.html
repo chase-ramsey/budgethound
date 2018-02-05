@@ -7,47 +7,8 @@
     <title>BudgetHound {% block extra_title %}{% endblock %}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.6.2/css/bulma.min.css">
     <script defer src="https://use.fontawesome.com/releases/v5.0.0/js/all.js"></script>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
     {% block extra_head %}{% endblock %}
-    <style type="text/css">
-        body {
-            background: #FAFAFA;
-            color: #424242;
-            min-height: 100vh;
-        }
-
-        a {
-            color: #F0544F;
-        }
-
-        .navbar {
-            background: #3B80E2;
-        }
-
-        .navbar a {
-            color: #C4DCFF;
-            /*text-decoration: none;
-            margin: 5px 20px;
-            margin-right: auto;*/
-        }
-
-        .navbar a:hover {
-            background: #3B80E2;
-            color: #FAFAFA;
-        }
-
-        .card-header {
-            background: #3B80E2;
-        }
-
-        .card-header-title {
-            color: #FAFAFA;
-        }
-
-        #daily-pie, #weekly-status {
-            height: 225px;
-        }
-
-    </style>
 </head>
 <body>
     <div class="navbar" role="navigation" aria-label="main navigation">

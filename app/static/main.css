@@ -1,0 +1,42 @@
+body {
+    background: #FAFAFA;
+    color: #424242;
+    min-height: 100vh;
+}
+
+a {
+    color: #F0544F;
+}
+
+.navbar {
+    background: #3B80E2;
+}
+
+.navbar a {
+    color: #C4DCFF;
+    /*text-decoration: none;
+    margin: 5px 20px;
+    margin-right: auto;*/
+}
+
+.navbar a:hover {
+    background: #3B80E2;
+    color: #FAFAFA;
+}
+
+.card-header {
+    background: #3B80E2;
+}
+
+.card-header-title {
+    color: #FAFAFA;
+}
+
+#daily-pie, #weekly-status {
+    height: 225px;
+}
+
+.table {
+    border-radius: 4px;
+    box-shadow: 0 0 1px #4a4a4a;
+}

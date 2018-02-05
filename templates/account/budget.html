@@ -4,11 +4,26 @@
 {% block content %}
 <div class="section">
     <h1 class="title">Budget</h1>
-    <ul>
-        {% for item in budget_items %}
-        <li>{{ item.name }}: {{ item.value }}</li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'budget_create' %}">Add Item</a>
+    <a href="{% url 'budget_create' %}">Add Item</a><br><br>
+    <table class="table is-striped is-hoverable is-fullwidth">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th class="is-hidden-mobile">Description</th>
+                <th>Value</th>
+                <th>Delete</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in budget_items %}
+            <tr>
+                <td>{{ item.name }}</td>
+                <td class="is-hidden-mobile">{{ item.description }}</td>
+                <td>{{ item.value }}</td>
+                <td><a href="{% url 'budget_delete' item.id %}" class="budget-delete" value="{{ item.id }}">Delete</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
 </div>
 {% endblock %}

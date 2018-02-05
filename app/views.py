@@ -144,7 +144,10 @@ def user_create(request):
 
 @login_required
 def budget_list(request):
-    budget_items = Budget.objects.filter(account=request.user).exclude(name=Budget.DAILY)
+    budget_items = Budget.objects.filter(account=request.user) \
+        .exclude(name=Budget.DAILY) \
+        .order_by('-value')
+
     if not budget_items:
         messages.warning(
             request,
@@ -168,6 +171,7 @@ def budget_create(request):
             budget_item = form.save(commit=False)
             budget_item.account = request.user
             form.save()
+            messages.success(request, 'Created!', extra_tags='success')
             return redirect('budget_list')
         else:
             for error in form.errors:
@@ -175,6 +179,13 @@ def budget_create(request):
 
     form = BudgetItemForm()
     return render(request, 'account/budget_create.html', {'form': form})
+
+
+@login_required
+def budget_delete(request, budget_id):
+    Budget.objects.get(id=budget_id).delete()
+    messages.success(request, 'Deleted!', extra_tags='success')
+    return redirect('budget_list')
 
 
 @login_required

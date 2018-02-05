@@ -24,6 +24,14 @@ a {
     color: #FAFAFA;
 }
 
+a.navbar-item.is-hidden-desktop {
+    color: #3B80E2;
+}
+
+a.navbar-item.is-hidden-desktop:hover {
+    background: #C4DCFF;
+}
+
 .card-header {
     background: #3B80E2;
 }

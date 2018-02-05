@@ -3,9 +3,38 @@
 
 {% block content %}
 <div class="section">
+    <h1 class="title">Users</h1>
+    <div class="section banner">
+        <div class="container">
+            <div class="level">
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">Total Monthly Income</p>
+                        <p class="title">{{ total_income }}</p>
+                    </div>
+                </div>
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">No. Users</p>
+                        <p class="title">{{ user_count }}</p>
+                    </div>
+                </div>
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">Transactions Today</p>
+                        <p class="title">{{ today_count }}</p>
+                    </div>
+                </div>
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">Add User</p>
+                        <p class="title"><a href="{% url 'user_create' %}"><i class="fas fa-plus fa-sm"></i></a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><br><br>
     <div class="container">
-        <h1 class="title">Users</h1>
-        <a href="{% url 'user_create' %}">Add User</a><br><br>
         <div class="columns">
             {% for account_user in account_users %}
             <div class="column is-one-quarter">

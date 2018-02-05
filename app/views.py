@@ -110,7 +110,8 @@ def account_home(request):
 
 @login_required
 def users_list(request):
-    account_users = AccountUser.objects.filter(account=request.user)
+    account = request.user
+    account_users = AccountUser.objects.filter(account=account)
     if not account_users:
         messages.warning(
             request,
@@ -118,8 +119,17 @@ def users_list(request):
             'Create users <a href={}>here</a>.'.format(reverse('user_create'))
         )
 
+    total_income = account_users.aggregate(total=Sum('income'))['total']
+    user_count = account_users.count()
+
+    today = get_local_today_min()
+    today_count = Transaction.objects.filter(account=account, time__gte=today).count()
+
     ctx = {
         'account_users': account_users,
+        'total_income': total_income,
+        'user_count': user_count,
+        'today_count': today_count
     }
 
     return render(request, 'account/user.html', ctx)

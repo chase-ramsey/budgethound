@@ -9,8 +9,8 @@
             <div class="level">
                 <div class="level-item has-text-centered">
                     <div>
-                        <p class="heading">Due Next</p>
-                        <p class="title">---</p>
+                        <p class="heading">Total Budgeted</p>
+                        <p class="title">{{ budget_total }}</p>
                     </div>
                 </div>
                 <div class="level-item has-text-centered">
@@ -21,14 +21,14 @@
                 </div>
                 <div class="level-item has-text-centered">
                     <div>
-                        <p class="heading">Total Budgeted</p>
-                        <p class="title">{{ budget_total }}</p>
+                        <p class="heading">Due Next</p>
+                        <p class="title">---</p>
                     </div>
                 </div>
                 <div class="level-item has-text-centered">
                     <div>
                         <p class="heading">Add Item</p>
-                        <p class="title {{ standing_class }}"><a href="{% url 'budget_create' %}"><i class="fas fa-plus fa-sm"></i></a></p>
+                        <p class="title"><a href="{% url 'budget_create' %}"><i class="fas fa-plus fa-sm"></i></a></p>
                     </div>
                 </div>
             </div>

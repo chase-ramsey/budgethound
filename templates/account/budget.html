@@ -4,7 +4,36 @@
 {% block content %}
 <div class="section">
     <h1 class="title">Budget</h1>
-    <a href="{% url 'budget_create' %}">Add Item</a><br><br>
+    <div class="section banner">
+        <div class="container">
+            <div class="level">
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">Due Next</p>
+                        <p class="title">---</p>
+                    </div>
+                </div>
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">No. Items</p>
+                        <p class="title">{{ budget_count }}</p>
+                    </div>
+                </div>
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">Total Budgeted</p>
+                        <p class="title">{{ budget_total }}</p>
+                    </div>
+                </div>
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">Add Item</p>
+                        <p class="title {{ standing_class }}"><a href="{% url 'budget_create' %}"><i class="fas fa-plus fa-sm"></i></a></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div><br><br>
     <table class="table is-striped is-hoverable is-fullwidth">
         <thead>
             <tr>

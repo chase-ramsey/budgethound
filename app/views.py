@@ -148,6 +148,9 @@ def budget_list(request):
         .exclude(name=Budget.DAILY) \
         .order_by('-value')
 
+    budget_total = budget_items.aggregate(total=Sum('value'))['total']
+    budget_count = budget_items.count()
+
     if not budget_items:
         messages.warning(
             request,
@@ -158,6 +161,8 @@ def budget_list(request):
 
     ctx = {
         'budget_items': budget_items,
+        'budget_total': budget_total,
+        'budget_count': budget_count
     }
 
     return render(request, 'account/budget.html', ctx)

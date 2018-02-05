@@ -5,33 +5,31 @@
 {% endblock %}
 
 {% block content %}
-<div class="hero">
-    <div class="hero-body">
-        <div class="container">
-            <div class="level">
-                <div class="level-item has-text-centered">
-                    <div>
-                        <p class="heading">Date</p>
-                        <p class="title">{{ today|date:"M. d, Y" }}</p>
-                    </div>
+<div class="section">
+    <div class="container">
+        <div class="level">
+            <div class="level-item has-text-centered">
+                <div>
+                    <p class="heading">Date</p>
+                    <p class="title">{{ today|date:"M. d, Y" }}</p>
                 </div>
-                <div class="level-item has-text-centered">
-                    <div>
-                        <p class="heading">Daily Budget</p>
-                        <p class="title">{{ daily_budget }}</p>
-                    </div>
+            </div>
+            <div class="level-item has-text-centered">
+                <div>
+                    <p class="heading">Daily Budget</p>
+                    <p class="title">{{ daily_budget }}</p>
                 </div>
-                <div class="level-item has-text-centered">
-                    <div>
-                        <p class="heading">Daily Remaining</p>
-                        <p class="title">{{ remaining }}</p>
-                    </div>
+            </div>
+            <div class="level-item has-text-centered">
+                <div>
+                    <p class="heading">Daily Remaining</p>
+                    <p class="title">{{ remaining }}</p>
                 </div>
-                <div class="level-item has-text-centered">
-                    <div>
-                        <p class="heading">Weekly Standing</p>
-                        <p class="title {{ standing_class }}">{{ weekly_standing }}</p>
-                    </div>
+            </div>
+            <div class="level-item has-text-centered">
+                <div>
+                    <p class="heading">Weekly Standing</p>
+                    <p class="title {{ standing_class }}">{{ weekly_standing }}</p>
                 </div>
             </div>
         </div>

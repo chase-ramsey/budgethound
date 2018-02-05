@@ -46,7 +46,7 @@ a.navbar-item.is-hidden-desktop:hover {
 
 .table {
     border-radius: 4px;
-    box-shadow: 0 0 1px #4a4a4a;
+    box-shadow: 0 0 1px #424242;
 }
 
 .card-image {
@@ -54,4 +54,9 @@ a.navbar-item.is-hidden-desktop:hover {
     padding: 20px;
     background: #C4DCFF;
     color: #3B80E2;
+}
+
+div.banner {
+    border: 1px solid #C4DCFF;
+    border-radius: 4px;
 }

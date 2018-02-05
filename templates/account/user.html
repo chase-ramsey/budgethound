@@ -3,12 +3,26 @@
 
 {% block content %}
 <div class="section">
-    <h1 class="title">Users</h1>
-    <ul>
-        {% for account_user in account_users %}
-        <li>{{ account_user.name }}</li>
-        {% endfor %}
-    </ul>
-    <a href="{% url 'user_create' %}">Add User</a>
+    <div class="container">
+        <h1 class="title">Users</h1>
+        <a href="{% url 'user_create' %}">Add User</a><br><br>
+        <div class="columns">
+            {% for account_user in account_users %}
+            <div class="column is-one-quarter">
+                <div class="card">
+                    <div class="card-image">
+                        <i class="fas fa-user fa-10x"></i>
+                    </div>
+                    <div class="card-content">
+                        <h3 class="title">{{ account_user.name }}</h3>
+                    </div>
+                    <footer class="card-footer">
+                        <p class="card-footer-item"><b>Income: &nbsp;</b> ${{ account_user.income }}</p>
+                    </footer>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
 </div>
 {% endblock %}

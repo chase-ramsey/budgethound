@@ -48,3 +48,10 @@ a.navbar-item.is-hidden-desktop:hover {
     border-radius: 4px;
     box-shadow: 0 0 1px #4a4a4a;
 }
+
+.card-image {
+    text-align: center;
+    padding: 20px;
+    background: #C4DCFF;
+    color: #3B80E2;
+}

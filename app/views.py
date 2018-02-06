@@ -262,7 +262,7 @@ def get_weekly_status_data(request):
     )
 
     totals = Transaction.objects.filter(account=account) \
-        .filter(time__gte=start_day) \
+        .filter(time__gte=start_day, budget__name=Budget.DAILY) \
         .annotate(day=TruncDay('time')) \
         .values('day') \
         .annotate(total=Sum('value')) \

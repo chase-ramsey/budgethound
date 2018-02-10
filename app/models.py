@@ -1,4 +1,4 @@
-from app.util.calendar import get_current_week, get_local_today_min
+from app.util.calendar import get_current_week, get_local_today_min, get_month_days
 from datetime import timedelta
 from decimal import Decimal
 from django.contrib.auth.models import AbstractUser
@@ -13,25 +13,23 @@ class Account(AbstractUser):
         combined_income = AccountUser.objects.filter(account=self).aggregate(total=models.Sum('income'))
         budget_total = Budget.objects.filter(account=self).aggregate(total=models.Sum('value'))
         try:
-            exact = (combined_income['total'] - budget_total['total']) / 32
+            exact = (combined_income['total'] - budget_total['total']) / get_month_days()
             return Decimal(format(exact.__floor__(), '.2f'))
         except TypeError:
             return Decimal('0.00')
 
-    def get_weekly_standing(self):
+    def get_monthly_standing(self):
         today = get_local_today_min()
-        week = get_current_week()
-
-        days_offset = week.index(today.day)
+        days_offset = today.day - 1
         start = today - timedelta(days=days_offset)
 
-        weekly_spent = Transaction.objects.filter(account=self, time__gte=start) \
+        monthly_spent = Transaction.objects.filter(account=self, time__gte=start) \
             .filter(budget__name=Budget.DAILY) \
             .aggregate(total=models.Sum('value'))['total'] or 0
 
-        weekly_goal = self.get_daily_goal() * (days_offset + 1)
+        montly_goal = self.get_daily_goal() * today.day
 
-        return weekly_goal - weekly_spent
+        return montly_goal - monthly_spent
 
 
 class AccountUser(models.Model):

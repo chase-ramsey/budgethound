@@ -1,4 +1,4 @@
-from calendar import monthcalendar
+from calendar import Calendar, monthcalendar
 from datetime import datetime, time
 from dateutil.parser import parse
 from django.utils.timezone import get_current_timezone, localtime, make_aware, now
@@ -50,3 +50,15 @@ def get_start_day_for_week():
 
     first_day = datetime(today.year, today.month, week[0], tzinfo=get_current_timezone())
     return first_day
+
+
+def get_month_days():
+    today = get_local_today_min()
+    cal = Calendar()
+
+    month = filter(
+        lambda d: d > 0,
+        list(cal.itermonthdays(today.year, today.month))
+    )
+
+    return len(list(month))

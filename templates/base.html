@@ -30,11 +30,13 @@
                     <a class="navbar-item is-hidden-touch" href="{% url 'account_home' %}">Account</a>
                     <a class="navbar-item is-hidden-touch" href="{% url 'users_list' %}">Users</a>
                     <a class="navbar-item is-hidden-touch" href="{% url 'budget_list' %}">Budget</a>
-                    <a class="navbar-item is-hidden-touch" href="{% url 'transaction_create' %}">Log Transaction</a>
+                    <a class="navbar-item is-hidden-touch" href="{% url 'transaction_list' %}">Transactions</a>
+                    <a class="navbar-item is-hidden-touch" href="{% url 'transaction_create' %}">Log Transaction</i></a>
                     <a class="navbar-item is-hidden-desktop" href="{% url 'account_home' %}">Account</a>
                     <a class="navbar-item is-hidden-desktop" href="{% url 'users_list' %}">Users</a>
                     <a class="navbar-item is-hidden-desktop" href="{% url 'budget_list' %}">Budget</a>
-                    <a class="navbar-item is-hidden-desktop" href="{% url 'transaction_create' %}">Log Transaction</a>
+                    <a class="navbar-item is-hidden-desktop" href="{% url 'transaction_list' %}">Transactions</a>
+                    <a class="navbar-item is-hidden-desktop" href="{% url 'transaction_create' %}">Log Transaction</i></a>
                     {% else %}
                     <a class="navbar-item is-hidden-touch" href="{% url 'login' %}">Login</a>
                     <a class="navbar-item is-hidden-touch" href="{% url 'register' %}">Register</a>

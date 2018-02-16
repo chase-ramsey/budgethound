@@ -1,7 +1,7 @@
 from app.forms import AccountUserForm, BudgetItemForm, RegistrationForm, TransactionForm
 from app.models import AccountUser, Budget, Transaction
 from app.util.calendar import get_current_week, get_local_today_min, get_start_day_for_week
-from datetime import datetime
+from datetime import datetime, timedelta
 from django.contrib import messages
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
@@ -154,7 +154,8 @@ def user_create(request):
 
 @login_required
 def budget_list(request):
-    budget_items = Budget.objects.filter(account=request.user) \
+    account = request.user
+    budget_items = Budget.objects.filter(account=account) \
         .exclude(name=Budget.DAILY) \
         .order_by('-value')
 
@@ -180,11 +181,12 @@ def budget_list(request):
 
 @login_required
 def budget_create(request):
+    account = request.user
     if request.method == 'POST':
         form = BudgetItemForm(request.POST)
         if form.is_valid():
             budget_item = form.save(commit=False)
-            budget_item.account = request.user
+            budget_item.account = account
             form.save()
             messages.success(request, 'Created!', extra_tags='success')
             return redirect('budget_list')
@@ -204,9 +206,39 @@ def budget_delete(request, budget_id):
 
 
 @login_required
+def transaction_list(request):
+    account = request.user
+
+    start = get_local_today_min() - timedelta(days=30)
+    transactions = Transaction.objects.filter(account=account, time__gte=start)
+
+    if not transactions:
+        messages.warning(
+            request,
+            "You haven't logged any transactions. "
+            'Start <a href={}>here</a>.'.format(reverse('transaction_create')),
+            extra_tags=['safe', 'warning']
+        )
+
+    ctx = {
+        'transactions': transactions
+    }
+
+    return render(request, 'account/transaction.html', ctx)
+
+
+@login_required
+def transaction_delete(request, transaction_id):
+    Transaction.objects.get(id=transaction_id).delete()
+    messages.success(request, 'Deleted!', extra_tags='success')
+    return redirect('transaction_list')
+
+
+@login_required
 def transaction_create(request):
+    account = request.user
     if request.method == 'POST':
-        form = TransactionForm(request.user, request.POST)
+        form = TransactionForm(account, request.POST)
         if form.is_valid():
             transaction = form.save(commit=False)
             transaction.account = request.user
@@ -222,9 +254,9 @@ def transaction_create(request):
 
 @login_required
 def get_daily_pie_data(request):
-    start = get_local_today_min()
-
     account = request.user
+
+    start = get_local_today_min()
     daily_budget = account.get_daily_goal()
     t_sum = Transaction.objects.filter(
         account=request.user,

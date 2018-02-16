@@ -1,34 +1,34 @@
 {% extends "base.html" %}
-{% block extra_title %}| Budget{% endblock %}
+{% block extra_title %}| Transactions{% endblock %}
 
 {% block content %}
 <div class="section">
-    <h1 class="title">Budget</h1>
+    <h1 class="title">Transactions</h1>
     <div class="section banner">
         <div class="container">
             <div class="level">
                 <div class="level-item has-text-centered">
                     <div>
-                        <p class="heading">Total Budgeted</p>
-                        <p class="title">{{ budget_total }}</p>
-                    </div>
-                </div>
-                <div class="level-item has-text-centered">
-                    <div>
-                        <p class="heading">No. Items</p>
-                        <p class="title">{{ budget_count }}</p>
-                    </div>
-                </div>
-                <div class="level-item has-text-centered">
-                    <div>
-                        <p class="heading">Due Next</p>
+                        <p class="heading">???</p>
                         <p class="title">---</p>
                     </div>
                 </div>
                 <div class="level-item has-text-centered">
                     <div>
-                        <p class="heading">Add Item</p>
-                        <p class="title"><a href="{% url 'budget_create' %}"><i class="fas fa-plus fa-sm"></i></a></p>
+                        <p class="heading">???</p>
+                        <p class="title">---</p>
+                    </div>
+                </div>
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">???</p>
+                        <p class="title">---</p>
+                    </div>
+                </div>
+                <div class="level-item has-text-centered">
+                    <div>
+                        <p class="heading">Log Transaction</p>
+                        <p class="title"><a href="{% url 'transaction_create' %}"><i class="fas fa-plus fa-sm"></i></a></p>
                     </div>
                 </div>
             </div>
@@ -44,12 +44,12 @@
             </tr>
         </thead>
         <tbody>
-            {% for item in budget_items %}
+            {% for item in transactions %}
             <tr>
-                <td>{{ item.name }}</td>
-                <td class="is-hidden-mobile">{{ item.description }}</td>
+                <td>{{ item.description }}</td>
+                <td class="is-hidden-mobile">{{ item.budget.name }}</td>
                 <td>{{ item.value }}</td>
-                <td><a href="{% url 'budget_delete' item.id %}" class="budget-delete">Delete</a></td>
+                <td><a href="{% url 'transaction_delete' item.id %}" class="transaction-delete">Delete</a></td>
             </tr>
             {% endfor %}
         </tbody>
